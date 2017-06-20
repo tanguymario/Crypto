@@ -1,6 +1,12 @@
 # coding: utf-8
 
 class VoteSystem:
+
+    def __init__(self, paillier):
+        self.paillier = paillier
+        self.reset()
+
+
     # Une ébauche de système de référendum (on comptabilise les 'pour',
     # les 'contre', et le reste est compté comme vote blanc.
     # * la fonction vote permet de chiffrer à un votant de chriffrer son vote
@@ -20,9 +26,9 @@ class VoteSystem:
         V[1] = self.paillier.encrypt(V[1])
         V[2] = self.paillier.encrypt(V[2])
 
-        N2 = self.paillier.N * self.paillier.N
+        pk2 = self.paillier.pk * self.paillier.pk
         for i in range(3):
-            self.T[i] = self.T[i] * V[i] % N2
+            self.T[i] = self.T[i] * V[i] % pk2
 
 
     def reset(self):
@@ -37,8 +43,3 @@ class VoteSystem:
         print 'Nombre de votes \'pour\'   : {0:d}'.format(pro)
         print 'Nombre de votes \'contre\' : {0:d}'.format(against)
         print 'Nombre de votes blancs   : {0:d}'.format(white)
-
-
-    def __init__(self, paillier):
-        self.paillier = paillier
-        self.reset()

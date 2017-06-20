@@ -6,11 +6,11 @@ class CryptoSystemAsymetric(CryptoSystem):
 
     def decrypt(self, m):
         raise NotImplementedError()
-    
+
     def generatekeys(self):
         raise NotImplementedError()
 
-    def setkeys(publickey, secretkey):
+    def setkeys(self, publickey, secretkey):
         self.pk = publickey
         self.sk = secretkey
 

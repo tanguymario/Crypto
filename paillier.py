@@ -13,11 +13,13 @@ from random import randint
 # Returns x, y, g such that g = x * a + y * b = gcd(a, b).
 # If gcd(a, n) = 1, then igcdex(a, n)[0] is the inverse of a modulo n.
 
-
 class Paillier(CryptoSystemAsymetric):
     """
     Classe de Paillier
     """
+
+    def __init__(self, nbBits):
+        self.generatekeys(nbBits)
 
     # génére la clé publique N et la privée Phi
     def generatekeys(self, k):
@@ -26,41 +28,38 @@ class Paillier(CryptoSystemAsymetric):
         q = self.getprime(k)
 
         N = p * q
-        Phi = self.N - p - q + 1
+        Phi = N - p - q + 1
 
         self.setkeys(N, Phi)
 
     # Encrypt paillier
     def encrypt(self, m):
-        if m < 0 or m > self.N:
+        if m < 0 or m > self.pk:
             raise Exception('m bad argument exception')
 
         # Trouver r tel que :
         #    - 0 < R < N
         #    - g = x * a + y * b = gcd(a, b)
         #      If gcd(a, n) = 1, then igcdex(a, n)[0] is the inverse of a modulo n.
-        r = randint(1, self.N - 1)
-        while gcd(r, self.N) != 1:
-            r = randint(1, self.N - 1)
+        r = randint(1, self.pk - 1)
+        while gcd(r, self.pk) != 1:
+            r = randint(1, self.pk - 1)
 
-        N2 = self.N * self.N
-        c = (pow(1 + self.N, m, N2) * pow(r, self.N, N2)) % N2
+        pk2 = self.pk * self.pk
+        c = (pow(1 + self.pk, m, pk2) * pow(r, self.pk, pk2)) % pk2
+
         return c
 
     # Decrypt paillier
     def decrypt(self, c):
         # mu est l'inverse de N modulo Phi
-        mu = self.invmod(self.N, self.Phi)
+        mu = self.invmod(self.pk, self.sk)
 
-        r = pow(c, mu, self.N)
+        r = pow(c, mu, self.pk)
 
         # s est l'inverse de r modulo N
-        s = self.invmod(r, self.N)
-        N2 = self.N * self.N
-        m = ((c * pow(s, self.N, N2)) % N2 - 1) / self.N
+        s = self.invmod(r, self.pk)
+        pk2 = self.pk * self.pk
+        m = ((c * pow(s, self.pk, pk2)) % pk2 - 1) / self.pk
 
         return m
-
-
-    def __init__(self, nbBits):
-        self.generatekeys(nbBits)

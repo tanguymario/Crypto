@@ -12,6 +12,9 @@ class CryptoSystem:
     Classe abstraite d'un cryptosysteme
     """
 
+    def __init__(self):
+        pass
+
     # calcule un inverse x de a modulo n (0 < x < n)
     def invmod(self, a, n):
         t = numbers.igcdex(a, n)
@@ -25,11 +28,8 @@ class CryptoSystem:
 
     def decrypt(self, m):
         raise NotImplementedError()
-        
+
     # génère un nombre premier de k bits exactement
     def getprime(self, k):
         p = randprime(2**(k-1), 2**k)
         return p
-
-    def __init__(self):
-        pass
