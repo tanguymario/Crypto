@@ -51,9 +51,10 @@ def test_paillier():
 
 
 def main():
+    nbBits = 17
+
     x = 2
     y = 4
-
 
     """
     Alice et bob, deux utilisateur de Paillier.
@@ -61,11 +62,11 @@ def main():
     Bob connait ex et ey
     """
 
-    nbBits = 17
     alice = Paillier(nbBits)
     bob = Paillier(nbBits)
 
-    # TODO changer de position ce bout de code
+    # Si ce n'est pas alice qui encrypt x et y, ça fait pas des chocapic!
+    # TODO encrypter d'une autre personne ?
     ex = alice.encrypt(x)
     ey = alice.encrypt(y)
 
@@ -109,20 +110,28 @@ def main():
     """
 
     # [xs]
-    e4 = ex * es
+    e4 = 1
+    for i in range(s):
+        e4 *= ex
+    d4 = alice.decrypt(e4)
 
     # [ry]
-    e5 = er * ey
+    e5 = 1
+    for i in range(r):
+        e5 *= ey
+    d5 = alice.decrypt(e5)
 
     # [rs]
-    e6 = er * es
+    rs = r * s
 
     d3 = bob.decrypt(e3)
-
-    # This is magic !
-    d3 -= x*s + r*y + r*s
+    d3 -= d4 + d5 + rs
 
     print(d3)
+
+    """
+    On retrouve bien x * y sans connaitre x, ni y
+    """
 
 if __name__ == "__main__":
     main()
