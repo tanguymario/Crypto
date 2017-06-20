@@ -40,6 +40,6 @@ class VoteSystem:
         against = self.paillier.decrypt(self.T[1])
         white = self.paillier.decrypt(self.T[2])
 
-        print 'Nombre de votes \'pour\'   : {0:d}'.format(pro)
-        print 'Nombre de votes \'contre\' : {0:d}'.format(against)
-        print 'Nombre de votes blancs   : {0:d}'.format(white)
+        print('Nombre de votes \'pour\'   : ' + str(pro))
+        print('Nombre de votes \'contre\' : ' + str(against))
+        print('Nombre de votes blancs     : ' + str(white))

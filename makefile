@@ -11,4 +11,4 @@ clean-build:
 clean: clean-pyc clean-build
 
 run:
-	python2 main.py
+	python3 main.py

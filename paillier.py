@@ -19,10 +19,13 @@ class Paillier(CryptoSystemAsymetric):
     """
 
     def __init__(self, nbBits):
+        super().__init__()
         self.generatekeys(nbBits)
 
     # génére la clé publique N et la privée Phi
     def generatekeys(self, k):
+        super().generatekeys(k)
+
         # N : public
         p = self.getprime(k)
         q = self.getprime(k)
@@ -34,8 +37,12 @@ class Paillier(CryptoSystemAsymetric):
 
     # Encrypt paillier
     def encrypt(self, m):
+        # TODO
+        # if m:int then ... else if m:str then ...
+        """
         if m < 0 or m > self.pk:
             raise Exception('m bad argument exception')
+        """
 
         # Trouver r tel que :
         #    - 0 < R < N
