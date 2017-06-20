@@ -54,11 +54,75 @@ def main():
     x = 2
     y = 4
 
+
+    """
+    Alice et bob, deux utilisateur de Paillier.
+    Alice ne connait rien
+    Bob connait ex et ey
+    """
+
+    nbBits = 17
+    alice = Paillier(nbBits)
+    bob = Paillier(nbBits)
+
+    # TODO changer de position ce bout de code
+    ex = alice.encrypt(x)
+    ey = alice.encrypt(y)
+
+    """
+    Bob choisit deux nombres aléatoires r et s
+    Bob va ajouter à ex l'encryption de r
+    Idem pour ey et s
+    """
+
     r = 6
     s = 8
 
-    
+    er = alice.encrypt(r)
+    es = alice.encrypt(s)
 
+    # Propriétés homomorphiques de Paillier
+    e1 = ex * er
+    e2 = ey * es
+
+
+    """
+    On a donc e1 = [(x + r)] et e2 = [(y + s)].
+    Bob va envoyer les deux à Alice
+    """
+
+    """
+    Alice reçoit e1 et e2
+    """
+
+    d1 = int(alice.decrypt(e1))
+    d2 = int(alice.decrypt(e2))
+
+    d3 = d1 * d2
+
+    e3 = bob.encrypt(d3)
+
+    """
+    Alice renvoit alors l'encryption du produit à bob (e3)
+    Bob reçoit l'encryption d'Alice
+    Il doit donc soustraire à cela [xs], [ry] et [rs]
+    """
+
+    # [xs]
+    e4 = ex * es
+
+    # [ry]
+    e5 = er * ey
+
+    # [rs]
+    e6 = er * es
+
+    d3 = bob.decrypt(e3)
+
+    # This is magic !
+    d3 -= x*s + r*y + r*s
+
+    print(d3)
 
 if __name__ == "__main__":
     main()
